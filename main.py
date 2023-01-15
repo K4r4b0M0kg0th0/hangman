@@ -45,7 +45,7 @@ def hangman():
     clues_used = 0
 
     def give_clue():
-        global clues_used
+        nonlocal clues_used, correct_guesses
         if clues_used < 3:
             # Pick a random index of the word
             index = random.randint(0, len(word)-1)
@@ -77,24 +77,25 @@ def hangman():
         # Add the letter to the list of previous guesses
         guessed_letters.append(guess)
 
-    # Check if the letter is in the word
-    if guess in word:
-        # Update the blank spaces with the correct letter
-        for i in range(len(word)):
-            if word[i] == guess:
-                blank_spaces_list[i] = guess
-                correct_guesses += 1
-        print("Correct!")
-    else:
-        # Increment the number of incorrect guesses
-        incorrect_guesses += 1
-        print("Incorrect. You have", 6 - incorrect_guesses, "guesses left.")
-        if incorrect_guesses == 6:
+        # Check if the letter is in the word
+        if guess in word:
+            # Update the blank spaces with the correct letter
+            for i in range(len(word)):
+                if word[i] == guess:
+                    blank_spaces_list[i] = guess
+                    correct_guesses += 1
+            print("Correct!")
+        else:
+            # Increment the number of incorrect guesses
+            incorrect_guesses += 1
+            print("Incorrect. You have", 6 - incorrect_guesses, "guesses left.")
+            if incorrect_guesses == 6:
+                game_over = True
+                print("You lose! The word was", word + ".")
+        if correct_guesses == len(word):
             game_over = True
-            print("You lose! The word was", word + ".")
-    if correct_guesses == len(word):
-        game_over = True
-        print("You win! The word was", word + ".")
+            print("You win! The word was", word + ".")
+
 if __name__ == "__main__":
     while True:
         hangman()
